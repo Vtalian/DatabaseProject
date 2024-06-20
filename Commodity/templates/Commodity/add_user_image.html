@@ -1,5 +1,0 @@
-<form action="{% url 'Commodity:upload_handle'%}" enctype='multipart/form-data' method="post">
-    {% csrf_token %}
-    <p>选择图片：<input type="file" name="pic"></p>
-    <p><input type="submit" value="上传头像"></p>
-</form>

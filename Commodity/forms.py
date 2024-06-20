@@ -5,5 +5,6 @@ class CommodityForm(forms.ModelForm):
     
     class Meta:
         model=Commodity
-        fields=['name','image','price']
-        labels={'name':'商品名称','image':'商品图片','price':'商品价格'}
+        fields=['name','image','price','details']
+        labels={'name':'商品名称','image':'商品图片','price':'商品价格','details':'详情'}
+        widgets={'details':forms.Textarea(attrs={'col':80})}

@@ -11,7 +11,7 @@ def index(request):
     return render(request, 'Commodity/index.html',context)
 
 @login_required
-def add_good(request):
+def addcommodity(request):
     if request.method != 'POST':
         form=CommodityForm()
     else:
@@ -24,20 +24,25 @@ def add_good(request):
             #     for i in request.FILES['image'].chunks():
             #         destination.write(i)
             # form.cleaned_data['image']=new_name
-            form.save()
-            return redirect('Commodity:goods')
+            c=form.save(commit=False)
+            c.owner=request.user
+            id=c.id
+            c.save()
+            return redirect('Commodity:details',id=id)
     
     context={'form':form}
-    return render(request, 'Commodity/addgood.html',context)
+    return render(request, 'Commodity/addcommodity.html',context)
 
 @login_required
 def goods(request):
-    commodities=Commodity.objects.filter(owner=request.user).order_by('data')
+    commodities=Commodity.objects.filter(owner=request.user).order_by('date')
     context={'commodities':commodities}
     return render(request, 'Commodity/goods.html',context)
 
-@login_required
-def details(request,number):
-    commodity=Commodity.objects.get(id=number)
-    context={'commodity':commodity}
+
+def details(request,id):
+    commodity=Commodity.objects.get(id=id)
+    message=Message.objects.filter(name=id).order_by('date')
+    context={'commodity':commodity,'message':message}
     return render(request,'Commodity/details.html',context)
+

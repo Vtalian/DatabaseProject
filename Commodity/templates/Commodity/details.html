@@ -4,4 +4,19 @@
 <img src="{{MEDIA_URL}}{{commodity.image}}" width="500" height="600"></img>
 <p>商品名称：{{commodity.commodity_name}}</p>
 <p>价格：{{commodity.price}}</p>
+
+<div>
+    <h4>留言</h4>
+    <ul>
+        {% for message in message %}
+        <li>
+            <p>{{message.speaker}}</p>
+            <p>{{message.date|date:'M d,Y H:i'}}</p>
+            <p>{{message.content|linebreaks}}</p>
+        </li>
+        {% empty %}
+            <li>快来抢沙发吧！</li>
+        {% endfor %}
+    </ul>
+</div>
 {%endblock content%}

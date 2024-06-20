@@ -18,6 +18,9 @@
         </li>
         {% if user.is_authenticated %}
         hello,{{ user.username }}.
+        <li class="nav-item">
+            -<a href="{% url 'Commodity:addcommodity' %}">添加商品</a>
+        </li>
         {% else %}
         <p>你还没登录</p>
         <li class="nav-item">
