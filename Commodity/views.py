@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from Commodity.models import Commodity,ShoppingCart,Message,Order
 from .forms import CommodityForm
 from django.db import models
+from django.conf import settings
 from django.http import Http404
+import os
 
 # Create your views here.
 def index(request):
@@ -53,12 +55,17 @@ def details(request,id):
 
 def editcommodity(request,id):
     commodity=Commodity.objects.get(id=id)
+    prename=commodity.image
     if request.method != 'POST':
         form=CommodityForm(instance=commodity)
     else:
         form=CommodityForm(request.POST,request.FILES,instance=commodity)
         if form.is_valid():
             form.save()
+            nowcommodity=Commodity.objects.get(id=id)
+            if prename!=nowcommodity.image:
+                path='%s/%s' %(settings.MEDIA_ROOT,prename)
+                os.remove(path)
             return redirect('Commodity:details',id=id)
     
     content={'commodity':commodity,'form':form}
