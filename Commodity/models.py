@@ -20,7 +20,7 @@ class Commodity(models.Model):
         return self.name
 
 class ShoppingCart(models.Model):
-    commmodity=models.ForeignKey('Commodity',unique=False,on_delete=models.CASCADE,db_column='商品编号')
+    commodity=models.ForeignKey('Commodity',unique=False,on_delete=models.CASCADE,db_column='商品编号')
     adduser=models.ForeignKey(User,unique=False,default="",on_delete=models.CASCADE,db_column='加购人')
     date=models.DateTimeField(auto_now_add=True,db_column='加购日期')
 
@@ -36,7 +36,7 @@ class Order(models.Model):
     receipttag=models.BooleanField(default=False,db_column='收货标志')
     backtag=models.BooleanField(default=False,db_column='退货标志')
 
-    def __str__(self):
+    def __int__(self):
         return self.orderid
     
 class Message(models.Model):

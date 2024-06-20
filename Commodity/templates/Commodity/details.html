@@ -1,15 +1,22 @@
 {% extends 'Commodity/base.html' %}
 
 {%block content %}
+<h4>{{commodity.name}}</h4>
 <img src="{{MEDIA_URL}}{{commodity.image}}" width="500" height="600"></img>
-<p>商品名称：{{commodity.commodity_name}}</p>
 <p>价格：{{commodity.price}}</p>
+<div class="bg-light text-dark rounded">
+    <p>{{commodity.details}}</p>
+</div>
+{% if belong %}
+    <a href="{% url 'Commodity:editcommodity' commodity.id %}" class="text-muted">修改</a>
+{% endif %}
 
 <div>
     <h4>留言</h4>
     <ul>
         {% for message in message %}
         <li>
+            <hr />
             <p>{{message.speaker}}</p>
             <p>{{message.date|date:'M d,Y H:i'}}</p>
             <p>{{message.content|linebreaks}}</p>

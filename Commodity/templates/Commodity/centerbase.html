@@ -16,25 +16,26 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'Commodity:index' %}">
                 温易网</a>
-    
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
+
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Commodity:addcommodity' %}">添加商品</a>
+                        <a class="nav-link" href="{% url 'Commodity:addcommodity' %}">
+                            添加商品</a>
                     </li>
                 </ul> <!-- End of links on left side of navbar -->
-    
+
                 <!-- Account-related links -->
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-    
+
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text me-2"><a href="{% url 'Commodity:usercenter' user.id%}">Hello, {{ user.username }}.</a> 
+                        <span class="navbar-text me-2"><a href="{% url 'Commodity:usercenter' user.id%}">Hello, {{user.username }}.</a>
                         </span>
                     </li>
                     {% else %}
@@ -47,9 +48,9 @@
                             Log in</a>
                     </li>
                     {% endif %}
-    
+
                 </ul> <!-- End of account-related links -->
-    
+
                 {% if user.is_authenticated %}
                 <form action="{% url 'accounts:logout' %}" method='post'>
                     {% csrf_token %}
@@ -57,17 +58,22 @@
                         Log out</button>
                 </form>
                 {% endif %}
-    
+
             </div> <!-- Closes collapsible parts of navbar -->
-    
+
         </div> <!-- Closes navbar's container -->
     </nav> <!-- End of navbar -->
-    
+
+    <div class="row">
+        <div class="col"><a href="{% url 'Commodity:shoppingcart' user.id%}">购物车</a></div>
+        <div class="col"><a href="{% url 'Commodity:orders' user.id%}">订单</a></div>
+        <div class="col"><a href="{% url 'Commodity:usercommodity' user.id%}">商品</a></div>
+    </div>
     <main class="container">
         <div class="pb-2 mb-2 border-bottom">
             {% block page_header %}{% endblock page_header %}
         </div>
-    
+
         <div>
             {% block content %}{% endblock content %}
         </div>

@@ -1,10 +1,10 @@
 {% extends 'Commodity/base.html' %}
-
-{%block content %}
-<h3>上传你的闲置</h3>
-<form enctype="multipart/form-data" action="{% url 'Commodity:addcommodity' %}" method="post">
-    {% csrf_token %}
-    {{form.as_div}}
-    <button name="submit">Add</button>
-</form>
-{%endblock content%}
+{% load django_bootstrap5 %}
+    {% block content %}
+    <h3>上传你的闲置</h3>
+    <form enctype="multipart/form-data" action="{% url 'Commodity:addcommodity' %}" method="post">
+        {% csrf_token %}
+        {{form.as_div}}
+        {% bootstrap_button button_type='submit' content='上传' %}
+    </form>
+    {% endblock content %}

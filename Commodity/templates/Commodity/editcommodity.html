@@ -1,0 +1,12 @@
+{% extends 'Commodity/base.html' %}
+{% load django_bootstrap5 %}
+
+{%block content %}
+<h3>修改商品信息</h3>
+<a href="{% url 'Commodity:details' commodity.id %}">{{commodity.name}}</a>
+<form enctype="multipart/form-data" action="{% url 'Commodity:editcommodity' commodity.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_div}}
+    {% bootstrap_button button_type='submit' content='保存' %}
+</form>
+{%endblock content%}

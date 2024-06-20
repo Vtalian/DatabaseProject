@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from Commodity.models import Commodity,ShoppingCart,Message,Order
 from .forms import CommodityForm
+from django.db import models
 from django.http import Http404
 
 # Create your views here.
@@ -43,6 +44,50 @@ def goods(request):
 def details(request,id):
     commodity=Commodity.objects.get(id=id)
     message=Message.objects.filter(name=id).order_by('date')
-    context={'commodity':commodity,'message':message}
+    if request.user==commodity.owner:
+        belong=True
+    else:
+        belong=False
+    context={'commodity':commodity,'message':message,'belong':belong}
     return render(request,'Commodity/details.html',context)
 
+def editcommodity(request,id):
+    commodity=Commodity.objects.get(id=id)
+    if request.method != 'POST':
+        form=CommodityForm(instance=commodity)
+    else:
+        form=CommodityForm(request.POST,request.FILES,instance=commodity)
+        if form.is_valid():
+            form.save()
+            return redirect('Commodity:details',id=id)
+    
+    content={'commodity':commodity,'form':form}
+    return render(request,'Commodity/editcommodity.html',content)
+
+def usercenter(request,id):#个人中心主页，默认展示购物车
+    shoppingcart=ShoppingCart.objects.filter(adduser=id).order_by('date')
+    content={'shopingcart':shoppingcart,'type':shoppingcart}
+    return render(request,'Commodity/usercenter.html',content)
+
+def shoppingcart(request,id):#个人中心-购物车
+    shoppingcart=ShoppingCart.objects.filter(adduser=id).values('commodity')
+    commodity=Commodity.objects.all()
+
+    q=models.Q()
+    q.connector='OR'
+    for s in shoppingcart:
+        q.children.append(('id',s['commodity']))
+
+    c=commodity.filter(q).order_by('date')
+    content={'commodity':c,'type':shoppingcart}
+    return render(request,'Commodity/shoppingcart.html',content)
+
+def orders(request,id):#个人中心-订单
+    orders=Order.objects.filter(purchaser=id).order_by('date')
+    content={'orders':orders}
+    return render(request,'Commodity/userorder.html',content)
+
+def usercommodity(request,id):#个人中心-在售商品
+    comodity=Commodity.objects.filter(owner=id,public=True,selltag=False).order_by('date')
+    content={'commodity':comodity,'type':comodity}
+    return render(request,'Commodity/usercenter.html',content)
