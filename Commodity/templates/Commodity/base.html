@@ -4,20 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温易网</title>
     {% load static %}
-    <title>主页</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 
 <body>
-    <p>
-        <a href="{% url 'Commodity:index' %}">index</a>-
-        <a href="{% url 'Commodity:goods' %}">Goods</a>
+    <ul class="nav">
+        <li class="nav-item">
+            <a href="{% url 'Commodity:index' %}">index</a>
+        </li>
         {% if user.is_authenticated %}
-            hello,{{ user.username }}.
+        hello,{{ user.username }}.
         {% else %}
-            <a href="{% url 'accounts:register' %}">Register</a>
+        <p>你还没登录</p>
+        <li class="nav-item">
+            -<a href="{% url 'accounts:register' %}">Register</a>-
+        </li>
+        <li class="nav-item">
             <a href="{% url 'accounts:login' %}">Log in</a>
+        </li>
         {% endif %}
+    </ul>
+
+    <p>
+        
     </p>
 
     {%block content %}{%endblock content%}

@@ -1,17 +1,12 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from Commodity.models import Commodity
+from Commodity.models import Commodity,ShoppingCart,Message,Order
 from .forms import CommodityForm
 from django.http import Http404
 
 # Create your views here.
 def index(request):
-    # commodity=Commodity.objects.all()
-    # num=commodity.commodity_number
-    # name=commodity.commodity_name
-    # price=commodity.commodity_prince
-    # context={'num':num, 'name':name, 'price':price}
-    commodities=Commodity.objects.order_by('data')
+    commodities=Commodity.objects.filter(public=True).order_by('date')
     context={'commodities':commodities}
     return render(request, 'Commodity/index.html',context)
 
@@ -42,10 +37,7 @@ def goods(request):
     return render(request, 'Commodity/goods.html',context)
 
 @login_required
-def good_details(request,number):
-    commodity=Commodity.objects.get(number=cnumber)
-    if request.user != commodity.owner:
-        raise Http404
-    else:
-        context={'commodity':commodity}
-        return render(request,'Commodity/gooddetails.html',context)
+def details(request,number):
+    commodity=Commodity.objects.get(id=number)
+    context={'commodity':commodity}
+    return render(request,'Commodity/details.html',context)

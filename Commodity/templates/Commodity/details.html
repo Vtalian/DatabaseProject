@@ -1,7 +1,7 @@
 {% extends 'Commodity/base.html' %}
 
 {%block content %}
+<img src="{{MEDIA_URL}}{{commodity.image}}" width="500" height="600"></img>
 <p>商品名称：{{commodity.commodity_name}}</p>
 <p>价格：{{commodity.price}}</p>
-<img src="{{MEDIA_URL}}{{commodity.image}}" width="500" height="600"></img>
 {%endblock content%}
