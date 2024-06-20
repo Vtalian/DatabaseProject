@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>主页</title>
+</head>
+
+<body>
+    <p>
+        <a href="{% url 'Commodity:index' %}">index</a>-
+        <a href="{% url 'Commodity:goods' %}">Goods</a>
+        {% if user.is_authenticated %}
+            hello,{{ user.username }}.
+        {% else %}
+            <a href="{% url 'accounts:register' %}">Register</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+        {% endif %}
+    </p>
+
+    {%block content %}{%endblock content%}
+
+    {% if user.is_authenticated %}
+        <hr />
+        <form action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <button name="submit">Log out</button>
+        </form>
+    {% endif %}
+</body>
+
+</html>

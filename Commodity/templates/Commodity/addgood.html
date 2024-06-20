@@ -1,0 +1,10 @@
+{% extends 'Commodity/base.html' %}
+
+{%block content %}
+<p>add user</p>
+<form enctype="multipart/form-data" action="{% url 'Commodity:addgoods' %}" method="post">
+    {% csrf_token %}
+    {{form.as_div}}
+    <button name="submit">Add</button>
+</form>
+{%endblock content%}
