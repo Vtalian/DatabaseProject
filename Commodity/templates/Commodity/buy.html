@@ -1,0 +1,18 @@
+{% extends 'Commodity/base.html' %}
+{% load django_bootstrap5 %}
+
+{%block content %}
+
+<h4>{{commodity.name}}</h4>
+<img src="{{MEDIA_URL}}{{commodity.image}}" width="700" height="600"></img>
+<p>价格：{{commodity.price}}</p>
+<div class="bg-light text-dark rounded">
+    <p>{{commodity.details}}</p>
+</div>
+<form action="{% url 'Commodity:submitorder' commodity.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_div}}
+    {% bootstrap_button button_type='submit' content='提交订单' %}
+</form>
+
+{%endblock content%}

@@ -11,4 +11,11 @@ urlpatterns=[
     path('shoppingcart/<int:id>',views.shoppingcart,name='shoppingcart'),
     path('orders/<int:id>',views.orders,name='orders'),
     path('usercommodity/<int:id>',views.usercommodity,name='usercommodity'),
+    path('orderdetails/<uuid:id>',views.orderdetails,name='orderdetails'),
+    path('dropcommodity/<uuid:id>',views.dropcommodity,name='dropcommodity'),
+    path('messages/<uuid:id>',views.messages,name='messages'),
+    path('dropmessages/<int:id>',views.dropmessages,name='dropmessages'),
+
+    path('buy/<uuid:id>',views.buy,name='buy'),
+    path('submitorder/<uuid:id>',views.submitorder,name='submitorder'),
 ]

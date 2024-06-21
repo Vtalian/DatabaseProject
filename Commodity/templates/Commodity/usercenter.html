@@ -4,13 +4,13 @@
 
 
 <ul class="list-group">
-    {% for co in commodities %}
+    {% for co in commodity %}
     <li>
         <div>
+            <hr />
             <img src="{{MEDIA_URL}}{{co.image}}" width="100" height="80" class="rounded" alt="Cinque Terre">
             <a href="{% url 'Commodity:details' co.id %}">{{co.name}}</a>
             <p>{{co.price}}</p>
-
         </div>
     </li>
     {% endfor %}
