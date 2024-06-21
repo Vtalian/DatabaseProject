@@ -1,0 +1,22 @@
+{% extends 'Commodity/centerbase.html' %}
+
+{% block content %}
+<div>
+    {% if color == 1 %}
+        <h4>订单详情<span class="badge bg-secondary">{{tag}}</span></h4>
+    {% elif color == 2 %}
+        <h4>订单详情<span class="badge bg-warning">{{tag}}</span></h4>
+    {% else %}
+        <h4>订单详情<span class="badge bg-success">{{tag}}</span></h4>
+    {% endif %}
+</div>
+<hr />
+<img src="{{MEDIA_URL}}{{commodity.image}}" width="100" height="80" class="rounded" alt="Cinque Terre">
+<div class="bg-light text-dark rounded">
+    <p>{{order.remark}}</p>
+</div>
+<p>订单编号：{{order.orderid}}</p>
+<p>订单创建时间:{{order.date|date:'M d,Y H:i'}}</p>
+
+
+{% endblock content %}

@@ -151,7 +151,6 @@ def dropmessages(request,id):
     message=Message.objects.get(id=id)
     if request.method=='POST' and request.user == message.speaker:
         message.delete()
-        messages.success(request,'删除成功')
         return redirect('Commodity:details',message.name.id)
     
 def buy(request,id):
@@ -171,3 +170,18 @@ def submitorder(request,id):
             order.save()
             ShoppingCart.objects.get(commodity=c,adduser=request.user).delete()
             return redirect('Commodity:shoppingcart',request.user.id)
+
+def orderdetails(request,id):
+    order=Order.objects.get(orderid=id)
+    commodity=order.commodity_id
+    if order.senttag==False:
+        tag='未发货'
+        color=1
+    elif order.senttag and order.receipttag ==False:
+        tag='未收货'
+        color=2
+    else:
+        tag='已完成'
+        color=3
+    content={'order':order,'commodity':commodity,'tag':tag,'color':color}
+    return render(request,'Commodity/orderdetails.html',content)
