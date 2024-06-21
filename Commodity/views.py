@@ -2,12 +2,18 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from Commodity.models import Commodity,ShoppingCart,Message,Order
 from .forms import CommodityForm,MessageForm,OrderForm
+from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 from django.http import Http404
 from django.contrib import messages
 from utils import methods
 import os
+
+#用户验证
+def user_comfirm(request,user):
+    if request.user != user:
+        raise Http404
 
 # Create your views here.
 def index(request):
@@ -38,13 +44,8 @@ def addcommodity(request):
     context={'form':form}
     return render(request, 'Commodity/addcommodity.html',context)
 
+
 @login_required
-def goods(request):
-    commodities=Commodity.objects.filter(owner=request.user).order_by('date')
-    context={'commodities':commodities}
-    return render(request, 'Commodity/goods.html',context)
-
-
 def details(request,id):
     commodity=Commodity.objects.get(id=id)
     message=Message.objects.filter(name=id).order_by('date')
@@ -56,10 +57,10 @@ def details(request,id):
     context={'commodity':commodity,'messages':message,'belong':belong,'form':form,'user':request.user}
     return render(request,'Commodity/details.html',context)
 
+@login_required
 def editcommodity(request,id):
     commodity=Commodity.objects.get(id=id)
-    if request.user != commodity.owner:
-        raise Http404
+    user_comfirm(request,commodity.owner)
     prename=commodity.image
     if request.method != 'POST':
         form=CommodityForm(instance=commodity)
@@ -78,53 +79,52 @@ def editcommodity(request,id):
 
 def usercenter(request,id):#个人中心主页，默认展示购物车
     shoppingcart=ShoppingCart.objects.filter(adduser=id).values('commodity')
-    commodity=Commodity.objects.all()
+    if shoppingcart.count() == 0:
+        content={'commodity':shoppingcart}
+    else:
+        commodity=Commodity.objects.all()
 
-    q=models.Q()
-    q.connector='OR'
-    for s in shoppingcart:
-        q.children.append(('id',s['commodity']))
+        q=models.Q()
+        q.connector='OR'
+        for s in shoppingcart:
+            q.children.append(('id',s['commodity']))
 
-    c=commodity.filter(q).order_by('date')
-    content={'commodity':c}
+        c=commodity.filter(q).order_by('date')
+        content={'commodity':c}
     return render(request,'Commodity/usercenter.html',content)
 
 def shoppingcart(request,id):#个人中心-购物车
+    user=User.objects.get(id=id) 
+    user_comfirm(request,user)
     shoppingcart=ShoppingCart.objects.filter(adduser=id).values('commodity')
-    commodity=Commodity.objects.all()
+    if shoppingcart.count() == 0:
+        content={'commodity':shoppingcart}
+    else:
+        commodity=Commodity.objects.all()
 
-    q=models.Q()
-    q.connector='OR'
-    for s in shoppingcart:
-        q.children.append(('id',s['commodity']))
+        q=models.Q()
+        q.connector='OR'
+        for s in shoppingcart:
+            q.children.append(('id',s['commodity']))
 
-    c=commodity.filter(q).order_by('date')
-    content={'commodity':c}
+        c=commodity.filter(q).order_by('date')
+        content={'commodity':c}
     return render(request,'Commodity/shoppingcart.html',content)
 
 def orders(request,id):#个人中心-订单
+    user=User.objects.get(id=id) 
+    user_comfirm(request,user)
+    
     orders=Order.objects.filter(purchaser=id).order_by('date')
-    p=Order.objects.filter(purchaser=id).order_by('date')
-    p=p.values('commodity_id')
-
-    q=models.Q()
-    q.connector='OR'
-    for ps in p:
-        q.children.append(('id',ps['commodity_id']))
-
-    commodity=Commodity.objects.all().filter(q).order_by('date')
-    content={'orders':orders,'commodity':commodity}
+    content={'orders':orders}
     return render(request,'Commodity/userorder.html',content)
 
 def usercommodity(request,id):#个人中心-在售商品
-    if request.user == id:
-        raise Http404
+    user=User.objects.get(id=id) 
+    user_comfirm(request,user)
     comodity=Commodity.objects.filter(owner=id,public=True,selltag=False).order_by('date')
     content={'commodity':comodity,'type':comodity}
-    return render(request,'Commodity/usercenter.html',content)
-
-def orderdetails(request,id):
-    return render(request,'Order/orderdetails.html')
+    return render(request,'Commodity/usercommodity.html',content)
 
 def dropcommodity(request,id):
     if request.method == 'POST':
@@ -154,10 +154,12 @@ def dropmessages(request,id):
         return redirect('Commodity:details',message.name.id)
     
 def buy(request,id):
-    commodity=Commodity.objects.get(id=id)
-    form=OrderForm()
-    content={'commodity':commodity,'form':form}
-    return render(request,'Commodity/buy.html',content)
+    if request.method=='POST':
+        commodity=Commodity.objects.get(id=id)
+        form=OrderForm()
+        content={'commodity':commodity,'form':form}
+        
+        return redirect(request,'Commodity/buy.html',content)
 
 def submitorder(request,id):
     if request.method == 'POST':

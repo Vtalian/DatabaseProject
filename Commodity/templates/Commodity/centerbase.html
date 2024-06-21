@@ -35,7 +35,8 @@
 
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text me-2"><a href="{% url 'Commodity:usercenter' user.id%}">Hello, {{user.username }}.</a>
+                        <span class="navbar-text me-2"><a href="{% url 'Commodity:usercenter' user.id%}"><button
+                                    class="btn btn-outline-secondary btn-sm" title="个人中心!">Hello, {{ user.username }}.</button></a>
                         </span>
                     </li>
                     {% else %}
@@ -64,10 +65,18 @@
         </div> <!-- Closes navbar's container -->
     </nav> <!-- End of navbar -->
 
-    <div class="row">
-        <div class="col"><a href="{% url 'Commodity:shoppingcart' user.id%}">购物车</a></div>
-        <div class="col"><a href="{% url 'Commodity:orders' user.id%}">订单</a></div>
-        <div class="col"><a href="{% url 'Commodity:usercommodity' user.id%}">商品</a></div>
+    <div class="container mt-3">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Commodity:shoppingcart' user.id%}">购物车</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Commodity:orders' user.id%}">订单</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Commodity:usercommodity' user.id%}">商品</a>
+            </li>
+        </ul>
     </div>
     <main class="container">
         <div class="pb-2 mb-2 border-bottom">

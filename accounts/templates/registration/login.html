@@ -1,4 +1,9 @@
 {% extends 'Commodity/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block page_header %}
+<h2>登录你的账户</h2>
+{% endblock page_header %}
 
 {%block content %}
     {% if form.errors %}
@@ -7,8 +12,7 @@
 
     <form action="{% url 'accounts:login' %}" method="post">
         {% csrf_token %}
-        {{ form.as_div }}
-
-        <button name="submit">Log in</button>
+        {% bootstrap_form form %}
+        {% bootstrap_button button_type="submit" content="登录" %}
     </form>
 {%endblock content%}

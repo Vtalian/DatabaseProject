@@ -3,28 +3,37 @@
 
 {%block content %}
 <h4>{{commodity.name}}</h4>
-<img src="{{MEDIA_URL}}{{commodity.image}}" width="700" height="600"></img>
-<p>价格：{{commodity.price}}</p>
-<div class="bg-light text-dark rounded">
-    <p>{{commodity.details}}</p>
-</div>
-{% if belong %}
-
-    <div class="row">
-        <div class="col">
-            <form action="{% url 'Commodity:editcommodity' commodity.id%}" method="get">
-                {% csrf_token %}
-                {% bootstrap_button button_class="btn btn-outline-primary btn-sm" button_type='submit' content='修改' %}
-            </form>
-        </div>
-        <div class="col">
-            <form action="{% url 'Commodity:dropcommodity' commodity.id%}" method="post">
-                {% csrf_token %}
-                {% bootstrap_button button_class='btn btn-outline-danger btn-sm float-right' button_type='submit' content='删除' %}
-            </form>
-        </div>
+<div class="row">
+    <div class="col">
+        <img src="{{MEDIA_URL}}{{commodity.image}}" width="700" height="600" class="img-fluid"></img>
     </div>
-{% endif %}
+    <div class="col">
+        <p>价格：{{commodity.price}}</p>
+        <div class="bg-light text-dark rounded">
+            <p>{{commodity.details}}</p>
+        </div>
+        {% if belong %}
+        
+        <div class="row">
+            <div class="col">
+                <form action="{% url 'Commodity:editcommodity' commodity.id%}" method="get">
+                    {% csrf_token %}
+                    {% bootstrap_button button_class="btn btn-outline-primary btn-sm" button_type='submit' content='修改' %}
+                </form>
+            </div>
+            <div class="col">
+                <form action="{% url 'Commodity:dropcommodity' commodity.id%}" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_button button_class='btn btn-outline-danger btn-sm float-right' button_type='submit' content='删除' %}
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<div class="row pt-5">
+    
+</div>
 
 <div>
     <h4>留言</h4>
