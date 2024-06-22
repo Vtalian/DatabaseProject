@@ -173,26 +173,42 @@ def dropmessages(request, id):
         return redirect('Commodity:details', message.name.id)
 
 
-def buy(request, id):
-    if request.method == 'POST':
-        commodity = Commodity.objects.get(id=id)
+def buy(request, commodity_id):
+    if request.method != 'POST':
+        commodity = Commodity.objects.get(id=commodity_id)
         form = OrderForm()
         content = {'commodity': commodity, 'form': form}
 
-        return redirect(request, 'Commodity/buy.html', content)
+        return render(request, 'Commodity/buy.html', content)
+    else:
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            f=form.save(commit=False)
+
+            commodity = Commodity.objects.get(id=commodity_id)
+            f.commodity_id=commodity
+            f.purchaser = request.user
+            f.seller=commodity.owner
+            f.save()
+            return redirect( 'Commodity:orderdetails', orderid)
 
 
-def submitorder(request, id):
+def submitorder(request, commodity_id):
     if request.method == 'POST':
         form = OrderForm(data=request.POST)
         if form.is_valid:
-            order = form.save(commit=False)
-            c = Commodity.objects.get(id=id)
-            order.commodity_id = c
-            order.purchaser = request.user
-            order.save()
-            ShoppingCart.objects.get(commodity=c, adduser=request.user).delete()
-            return redirect('Commodity:shoppingcart', request.user.id)
+            f=form.save(commit=False)
+            orderid=f.orderid
+            commodity = Commodity.objects.get(id=commodity_id)
+            f.commodity_id=commodity
+            f.purchaser = request.user
+            f.seller=commodity.owner
+            f.save()
+            commodity.selltag=True
+            commodity.save()
+
+            ShoppingCart.objects.get(commodity=commodity,adduser=request.user).delete()
+            return redirect( 'Commodity:orderdetails', orderid)
 
 
 def orderdetails(request, id):
