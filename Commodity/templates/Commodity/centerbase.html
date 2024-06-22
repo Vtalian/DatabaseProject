@@ -66,17 +66,17 @@
     </nav> <!-- End of navbar -->
 
     <div class="container mt-3">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'Commodity:shoppingcart' user.id%}">购物车</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'Commodity:orders' user.id%}">订单</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'Commodity:usercommodity' user.id%}">商品</a>
-            </li>
-        </ul>
+
+        <div class="nav justify-content-center">
+            <div class="btn-group">
+                <button class="btn btn-light"><a class="nav-link"
+                        href="{% url 'Commodity:shoppingcart' user.id%}">购物车</a></button>
+                <button class="btn btn-light"><a class="nav-link"
+                        href="{% url 'Commodity:orders' user.id%}">订单</a></button>
+                <button class="btn btn-light"><a class="nav-link"
+                        href="{% url 'Commodity:usercommodity' user.id%}">商品</a></button>
+            </div>
+        </div>
     </div>
     <main class="container">
         <div class="pb-2 mb-2">

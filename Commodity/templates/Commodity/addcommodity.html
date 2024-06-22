@@ -18,11 +18,13 @@
             <label for="id_price">商品价格</label>
         </div>
     
-        <div class="form-floating  mb-3 mt-3 text-center" style="height: 100px;">
-            <textarea name="details" class="form-control" placeholder="details" clos="40" rows="10" col="80" maxlength="200" id="id_details"></textarea>
+        <div class="form-floating mb-3 mt-3 text-center">
+            <textarea name="details" class="form-control" placeholder="details" style="height: 100px;" maxlength="200" id="id_details"></textarea>
             <label for="id_details">详情</label>
         </div>
-        <button class="btn btn-primary" type="submit">上传</button>
+        <div class="d-flex align-items-center justify-content-center">
+            <button class="btn btn-outline-primary" type="submit">上传</button>
+        </div>
     </form>
 </div>
     {% endblock content %}
