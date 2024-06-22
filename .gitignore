@@ -1,5 +1,6 @@
-dbvenv/
+.venv/
 __pycache__
 static/
 .idea/
 */migrations/
+SecondHand_trading/settings.py
