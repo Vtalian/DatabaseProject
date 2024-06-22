@@ -18,8 +18,12 @@
                 
             </div>
         </a>
+            {% empty %}
+            <p class="text-center">无结果</p>
         {% endfor %}
-        {{ html_list|safe }}
+        {% if tag %}
+            {{ html_list|safe }}
+        {% endif %}
     </div>
 </div>
 {%endblock content%}
