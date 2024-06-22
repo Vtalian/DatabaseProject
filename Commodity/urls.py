@@ -16,8 +16,8 @@ urlpatterns = [
     path('messages/<uuid:id>', views.messages, name='messages'),
     path('dropmessages/<int:id>', views.dropmessages, name='dropmessages'),
   
-    path('buy/<uuid:id>', views.buy, name='buy'),
-    path('submitorder/<uuid:id>', views.submitorder, name='submitorder'),
+    path('buy/<uuid:commodity_id>', views.buy, name='buy'),
+    path('submitorder/<uuid:commodity_id>', views.submitorder, name='submitorder'),
     path('search/', views.search, name='search'),
 
     path('buy/<uuid:commodity_id>', views.buy, name='buy'),

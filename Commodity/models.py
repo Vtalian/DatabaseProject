@@ -35,7 +35,7 @@ class Order(models.Model):
     commodity_id = models.ForeignKey('Commodity', unique=False, on_delete=models.CASCADE, db_column='商品编号')
     date = models.DateTimeField(auto_now_add=True, db_column='创建日期')
     seller = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, db_column='卖方')
-    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer', db_column='‘买方')
+    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer',db_column='‘买方')
     remark = models.TextField(max_length=100, blank=True, null=True, default="", db_column='备注')
     donetag = models.BooleanField(default=False, db_column='完成标志')
     senttag = models.BooleanField(default=False, db_column='发货标志')
