@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from Commodity.models import *
-from .forms import CommodityForm, MessageForm, OrderForm
+from .forms import *
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
@@ -223,7 +223,8 @@ def orderdetails(request, id):
     else:
         tag = '已完成'
         color = 3
-    content = {'order': order, 'commodity': commodity, 'tag': tag, 'color': color}
+    form = OrderSentForm()
+    content = {'order': order, 'commodity': commodity, 'tag': tag, 'color': color, 'form': form}
     return render(request, 'Commodity/orderdetails.html', content)
 
 
@@ -244,3 +245,15 @@ def search(request):
     page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
     return render(request, 'Commodity/search.html',
                   {'commodities': commodities[page.start:page.end], 'html_list': page.html_list, 'tag': tag})
+
+
+def sent(request, order_id):
+    if request.method == 'POST':
+        form=OrderSentForm(request.POST)
+        if form.is_valid():
+            tracking_number=form.cleaned_data['tracking_number']
+            order = Order.objects.get(orderid=order_id)
+            order.senttag = True
+            order.tracking_number=tracking_number
+            order.save()
+        return redirect('Commodity:orderdetails', order_id)

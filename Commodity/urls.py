@@ -20,4 +20,6 @@ urlpatterns = [
 
     path('buy/<uuid:commodity_id>', views.buy, name='buy'),
     path('submitorder/<uuid:commodity_id>', views.submitorder, name='submitorder'),
+
+    path('sent/<uuid:order_id>',views.sent, name='sent'),
 ]

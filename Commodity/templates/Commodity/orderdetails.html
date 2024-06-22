@@ -17,6 +17,45 @@
 </div>
 <p>订单编号：{{order.orderid}}</p>
 <p>订单创建时间:{{order.date|date:'M d,Y H:i'}}</p>
+    {% if order.senttag %}
+        <p>快递单号：{{ order.tracking_number }}</p>
+    
+    {% else %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sent">
+        发货
+    </button>
+    {% endif %}
+    <div class="modal fade" id="sent">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">快递单号</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
+                <!-- 模态框内容 -->
+                <div class="modal-body">
+                    <form action="{% url 'Commodity:sent' order.orderid%}" method="post">
+                        <div class="d-flex align-items-center justify-content-center">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="form-floating  mb-3 mt-3 text-center" style="width: 450px;">
+                                    <input name="tracking_number" class="form-control" placeholder="tracking_number" required id="tracking_number"></input>
+                                    <label for="tracking_number">快递单号</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary" type="submit">提交</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                </div>
+            
+            </div>
+        </div>
+    </div>
 {% endblock othercontent %}

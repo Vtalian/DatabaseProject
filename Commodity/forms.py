@@ -24,3 +24,8 @@ class OrderForm(forms.ModelForm):
         fields = ['remark']
         labels = {'remark': '添加备注'}
         widgets = {'details': forms.Textarea(attrs={'col': 80})}
+
+class OrderSentForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = {'tracking_number'}
