@@ -1,10 +1,28 @@
 {% extends 'Commodity/base.html' %}
 {% load django_bootstrap5 %}
     {% block content %}
-    <h3>上传你的闲置</h3>
+<div class="d-flex align-items-center justify-content-center">
     <form enctype="multipart/form-data" action="{% url 'Commodity:addcommodity' %}" method="post">
         {% csrf_token %}
-        {{form.as_div}}
-        {% bootstrap_button button_type='submit' content='上传' %}
+        <div class="form-floating  mb-3 mt-3 text-center">
+            <input type="text" class="form-control" name="name" placeholder="addcommodity" maxlength="60" id="id_name">
+            <label for="id_name">商品名称</label>
+        </div>
+    
+        <div class=" mb-3 mt-3 text-center">
+            <input type="file" name="image" class="form-control" placeholder="商品图片" accept="image/*" id="id_image">
+        </div>
+    
+        <div class="form-floating  mb-3 mt-3 text-center">
+            <input type="number" class="form-control" placeholder="price" name="price" step="0.01"  id="id_price">
+            <label for="id_price">商品价格</label>
+        </div>
+    
+        <div class="form-floating  mb-3 mt-3 text-center" style="height: 100px;">
+            <textarea name="details" class="form-control" placeholder="details" clos="40" rows="10" col="80" maxlength="200" id="id_details"></textarea>
+            <label for="id_details">详情</label>
+        </div>
+        <button class="btn btn-primary" type="submit">上传</button>
     </form>
+</div>
     {% endblock content %}

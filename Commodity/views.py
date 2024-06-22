@@ -6,8 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 from django.http import Http404
-from django.contrib import messages
-from utils import methods
+from utils.paging import Paging
 import os
 
 #用户验证
@@ -16,10 +15,13 @@ def user_comfirm(request,user):
         raise Http404
 
 # Create your views here.
-def index(request):
+def index(request,page=1):
     commodities=Commodity.objects.filter(public=True).order_by('date')
-    context={'commodities':commodities}
-    return render(request, 'Commodity/index.html',context)
+    # context={'commodities':commodities}
+    page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
+    return render(request, 'Commodity/index.html', {'commodities': commodities[page.start:page.end], 'html_list': page.html_list})
+    # return render(request, 'Commodity/index.html',context)
+    
 
 @login_required
 def addcommodity(request):
@@ -141,12 +143,14 @@ def messages(request,id):
     else:
         commodity=Commodity.objects.get(id=id)
         form=MessageForm(data=request.POST)
-        message=form.save(commit=False)
-        message.name=commodity
-        message.speaker=request.user
-        message.save()
-        return redirect('Commodity:details',id)
-    
+        if form.is_valid():
+            message=form.save(commit=False)
+            message.name=commodity
+            message.speaker=request.user
+            message.save()
+            return redirect('Commodity:details',id)
+        else:
+            raise Http404
 def dropmessages(request,id):
     message=Message.objects.get(id=id)
     if request.method=='POST' and request.user == message.speaker:
