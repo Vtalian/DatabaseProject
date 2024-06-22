@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from Commodity.models import Commodity, ShoppingCart, Message, Order
+from Commodity.models import *
 from .forms import CommodityForm, MessageForm, OrderForm
 from django.contrib.auth.models import User
 from django.db import models
@@ -206,3 +206,18 @@ def orderdetails(request, id):
         color = 3
     content = {'order': order, 'commodity': commodity, 'tag': tag, 'color': color}
     return render(request, 'Commodity/orderdetails.html', content)
+
+
+def search(request):
+    his = Search_History.objects.get(id=request.user)
+    message = his.str
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.cleaned_data['content']
+            his.str=message
+            his.save()
+    commodities = Commodity.objects.filter(public=True, name__contains=message).order_by('date')
+    page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
+    return render(request, 'Commodity/search.html',
+                  {'commodities': commodities[page.start:page.end], 'html_list': page.html_list})

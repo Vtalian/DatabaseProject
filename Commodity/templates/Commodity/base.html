@@ -30,7 +30,13 @@
                     </li>
                 </ul> <!-- End of links on left side of navbar -->
                 {% endif %}
-    
+                <form class="d-flex" role="search" action="{% url 'Commodity:search' %}" method="post" >
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="content" value="{{ message }}">
+                    <a href="">
+                        <button class="btn btn-light" type="submit">Search</button>
+                    </a>
+                  </form>
                 <!-- Account-related links -->
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
     
