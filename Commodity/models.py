@@ -17,6 +17,7 @@ class Commodity(models.Model):
     public = models.BooleanField(default=True, db_column='公开标志')
     selltag = models.BooleanField(default=False, db_column='售出标志')
     details = models.TextField(max_length=200, blank=False, null=True, default="", db_column='详细信息')
+    count = models.IntegerField(default=0, db_column='加购次数')
 
     def __str__(self):
         return self.name
@@ -33,12 +34,16 @@ class Order(models.Model):
                                db_column='订单编号')
     commodity_id = models.ForeignKey('Commodity', unique=False, on_delete=models.CASCADE, db_column='商品编号')
     date = models.DateTimeField(auto_now_add=True, db_column='创建日期')
-    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, db_column='购买人')
+    seller = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, db_column='卖方')
+    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer',db_column='‘买方')
     remark = models.TextField(max_length=100, blank=True, null=True, default="", db_column='备注')
     donetag = models.BooleanField(default=False, db_column='完成标志')
     senttag = models.BooleanField(default=False, db_column='发货标志')
     receipttag = models.BooleanField(default=False, db_column='收货标志')
     backtag = models.BooleanField(default=False, db_column='退货标志')
+    preoder = models.ForeignKey('Order', unique=False, blank=True, null=True, on_delete=models.CASCADE,
+                                db_column='前置单号')
+    tracking_number = models.CharField(max_length=20, blank=False, null=True, db_column='快递单号')
 
     def __int__(self):
         return self.orderid
@@ -59,3 +64,6 @@ class Search_History(models.Model):
 
     def __str__(self):
         return f"{self.str[0:30]}"
+
+    def __str__(self):
+        return f"{self.content[0:30]}"
