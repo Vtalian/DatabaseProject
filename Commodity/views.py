@@ -11,7 +11,7 @@ import os
 
 
 # 用户验证
-def user_comfirm(request, user):
+def user_confirm(request, user):
     if request.user != user:
         raise Http404
 
@@ -66,7 +66,7 @@ def details(request, id):
 @login_required
 def editcommodity(request, id):
     commodity = Commodity.objects.get(id=id)
-    user_comfirm(request, commodity.owner)
+    user_confirm(request, commodity.owner)
     prename = commodity.image
     if request.method != 'POST':
         form = CommodityForm(instance=commodity)
@@ -85,6 +85,7 @@ def editcommodity(request, id):
 
 
 def usercenter(request, id):  # 个人中心主页，默认展示购物车
+    user_confirm(request, User.objects.get(id=id))
     shoppingcart = ShoppingCart.objects.filter(adduser=id).values('commodity')
     if shoppingcart.count() == 0:
         content = {'commodity': shoppingcart}
@@ -102,8 +103,7 @@ def usercenter(request, id):  # 个人中心主页，默认展示购物车
 
 
 def shoppingcart(request, id):  # 个人中心-购物车
-    user = User.objects.get(id=id)
-    user_comfirm(request, user)
+    user_confirm(request, User.objects.get(id=id))
     shoppingcart = ShoppingCart.objects.filter(adduser=id).values('commodity')
     if shoppingcart.count() == 0:
         content = {'commodity': shoppingcart}
@@ -122,7 +122,7 @@ def shoppingcart(request, id):  # 个人中心-购物车
 
 def orders(request, id):  # 个人中心-订单
     user = User.objects.get(id=id)
-    user_comfirm(request, user)
+    user_confirm(request, user)
     q = models.Q()
     q.connector = 'OR'
     q.children.append(('purchaser',user))
@@ -134,7 +134,7 @@ def orders(request, id):  # 个人中心-订单
 
 def usercommodity(request, id):  # 个人中心-在售商品
     user = User.objects.get(id=id)
-    user_comfirm(request, user)
+    user_confirm(request, user)
     comodity = Commodity.objects.filter(owner=id, public=True, selltag=False).order_by('date')
     content = {'commodity': comodity, 'type': comodity}
     return render(request, 'Commodity/usercommodity.html', content)
