@@ -35,7 +35,7 @@ class Order(models.Model):
     commodity_id = models.ForeignKey('Commodity', unique=False, on_delete=models.CASCADE, db_column='商品编号')
     date = models.DateTimeField(auto_now_add=True, db_column='创建日期')
     seller = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, db_column='卖方')
-    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer',db_column='‘买方')
+    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer', db_column='‘买方')
     remark = models.TextField(max_length=100, blank=True, null=True, default="", db_column='备注')
     donetag = models.BooleanField(default=False, db_column='完成标志')
     senttag = models.BooleanField(default=False, db_column='发货标志')
@@ -58,12 +58,10 @@ class Message(models.Model):
     def __str__(self):
         return f"{self.content[0:30]}"
 
+
 class Search_History(models.Model):
-    id = models.ForeignKey(User, unique=True, blank=True, on_delete=models.CASCADE,primary_key=True)
+    id = models.ForeignKey(User, unique=True, blank=True, on_delete=models.CASCADE, primary_key=True)
     str = models.TextField(max_length=10000, blank=False, default="", db_column='最近一次搜索记录')
 
     def __str__(self):
         return f"{self.str[0:30]}"
-
-    def __str__(self):
-        return f"{self.content[0:30]}"
