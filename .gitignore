@@ -1,0 +1,5 @@
+dbvenv/
+__pycache__
+static/
+.idea/
+*/migrations/
