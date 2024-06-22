@@ -1,6 +1,6 @@
 {% extends 'Commodity/centerbase.html' %}
 
-{% block content %}
+{% block othercontent %}
 <div>
     {% if color == 1 %}
         <h4>订单详情<span class="badge bg-secondary">{{tag}}</span></h4>
@@ -19,4 +19,4 @@
 <p>订单创建时间:{{order.date|date:'M d,Y H:i'}}</p>
 
 
-{% endblock content %}
+{% endblock othercontent %}
