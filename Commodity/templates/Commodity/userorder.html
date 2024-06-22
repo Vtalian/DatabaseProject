@@ -1,33 +1,35 @@
 {% extends 'Commodity/centerbase.html' %}
 
 {% block content %}
-<div class="list-group w-50">
-    {% for o in orders %}
-    <a href="{% url 'Commodity:orderdetails' o.orderid %}" class="list-group-item list-group-item-action d-flex gap-3 py-3"
-        aria-current="true">
-        <img src="{{MEDIA_URL}}{{o.commodity_id.image}}" alt="twbs" width="100" height="80" class="rounded flex-shrink-0">
-        <div class="d-flex gap-2 w-100 justify-content-between">
-            <div>
-                <h5 class="mb-0">商品名称：{{o.commodity_id.name}}</h5>
-                <p class="mb-0 opacity-75">购买日期：{{o.date|date:'M d,Y H:i'}}</p>
-                
-            </div>
-            <small class="opacity-50 text-warning">
-                <div>
-                    {% if o.senttag == False %}
-                    <h4><span class="badge bg-secondary">未发货</span></h4>
-                    {% elif o.senttag and o.receipttag == False %}
-                    <h4><span class="badge bg-warning">未收货</span></h4>
-                    {% elif o.donetag == True%}
-                    <h4><span class="badge bg-success">已完成</span></h4>
-                    {% endif %}
-                </div>
-            </small>
+    <div class="list-group w-50">
+        {% for o in orders %}
+            <a href="{% url 'Commodity:orderdetails' o.orderid %}"
+               class="list-group-item list-group-item-action d-flex gap-3 py-3"
+               aria-current="true">
+                <img src="{{ MEDIA_URL }}{{ o.commodity_id.image }}" alt="twbs" width="100" height="80"
+                     class="rounded flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                    <div>
+                        <h5 class="mb-0">商品名称：{{ o.commodity_id.name }}</h5>
+                        <p class="mb-0 opacity-75">购买日期：{{ o.date|date:'M d,Y H:i' }}</p>
 
-        </div>
-    </a>
-    {% endfor %}
-</div>
-    
+                    </div>
+                    <small class="opacity-50 text-warning">
+                        <div>
+                            {% if o.senttag == False %}
+                                <h4><span class="badge bg-secondary">未发货</span></h4>
+                            {% elif o.senttag and o.receipttag == False %}
+                                <h4><span class="badge bg-warning">未收货</span></h4>
+                            {% elif o.donetag == True %}
+                                <h4><span class="badge bg-success">已完成</span></h4>
+                            {% endif %}
+                        </div>
+                    </small>
+
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
 
 {% endblock content %}

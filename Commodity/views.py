@@ -18,7 +18,7 @@ def user_comfirm(request, user):
 
 # Create your views here.
 def index(request, page=1):
-    commodities = Commodity.objects.filter(public=True).order_by('date')
+    commodities = Commodity.objects.filter(public=True,selltag=False).order_by('date')
     # context={'commodities':commodities}
     page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
     return render(request, 'Commodity/index.html',
@@ -123,8 +123,11 @@ def shoppingcart(request, id):  # 个人中心-购物车
 def orders(request, id):  # 个人中心-订单
     user = User.objects.get(id=id)
     user_comfirm(request, user)
-
-    orders = Order.objects.filter(purchaser=id).order_by('date')
+    q = models.Q()
+    q.connector = 'OR'
+    q.children.append(('purchaser',user))
+    q.children.append(('seller',user))
+    orders = Order.objects.filter(q).order_by('date')
     content = {'orders': orders}
     return render(request, 'Commodity/userorder.html', content)
 
