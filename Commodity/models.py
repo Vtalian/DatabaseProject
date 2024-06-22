@@ -57,3 +57,13 @@ class Message(models.Model):
 
     def __str__(self):
         return f"{self.content[0:30]}"
+
+class Search_History(models.Model):
+    id = models.ForeignKey(User, unique=True, blank=True, on_delete=models.CASCADE,primary_key=True)
+    str = models.TextField(max_length=10000, blank=False, default="", db_column='最近一次搜索记录')
+
+    def __str__(self):
+        return f"{self.str[0:30]}"
+
+    def __str__(self):
+        return f"{self.content[0:30]}"
