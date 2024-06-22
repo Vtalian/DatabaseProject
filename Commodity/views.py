@@ -18,7 +18,7 @@ def user_confirm(request, user):
 
 # Create your views here.
 def index(request, page=1):
-    commodities = Commodity.objects.filter(public=True,selltag=False).order_by('date')
+    commodities = Commodity.objects.filter(public=True, selltag=False).order_by('date')
     # context={'commodities':commodities}
     page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
     return render(request, 'Commodity/index.html',
@@ -125,8 +125,8 @@ def orders(request, id):  # 个人中心-订单
     user_confirm(request, user)
     q = models.Q()
     q.connector = 'OR'
-    q.children.append(('purchaser',user))
-    q.children.append(('seller',user))
+    q.children.append(('purchaser', user))
+    q.children.append(('seller', user))
     orders = Order.objects.filter(q).order_by('date')
     content = {'orders': orders}
     return render(request, 'Commodity/userorder.html', content)
@@ -183,32 +183,32 @@ def buy(request, commodity_id):
     else:
         form = OrderForm(request.POST)
         if form.is_valid():
-            f=form.save(commit=False)
+            f = form.save(commit=False)
 
             commodity = Commodity.objects.get(id=commodity_id)
-            f.commodity_id=commodity
+            f.commodity_id = commodity
             f.purchaser = request.user
-            f.seller=commodity.owner
+            f.seller = commodity.owner
             f.save()
-            return redirect( 'Commodity:orderdetails', orderid)
+            return redirect('Commodity:orderdetails', orderid)
 
 
 def submitorder(request, commodity_id):
     if request.method == 'POST':
         form = OrderForm(data=request.POST)
         if form.is_valid:
-            f=form.save(commit=False)
-            orderid=f.orderid
+            f = form.save(commit=False)
+            orderid = f.orderid
             commodity = Commodity.objects.get(id=commodity_id)
-            f.commodity_id=commodity
+            f.commodity_id = commodity
             f.purchaser = request.user
-            f.seller=commodity.owner
+            f.seller = commodity.owner
             f.save()
-            commodity.selltag=True
+            commodity.selltag = True
             commodity.save()
 
-            ShoppingCart.objects.get(commodity=commodity,adduser=request.user).delete()
-            return redirect( 'Commodity:orderdetails', orderid)
+            ShoppingCart.objects.get(commodity=commodity, adduser=request.user).delete()
+            return redirect('Commodity:orderdetails', orderid)
 
 
 def orderdetails(request, id):
@@ -234,9 +234,28 @@ def search(request):
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.cleaned_data['content']
-            his.str=message
+            his.str = message
             his.save()
     commodities = Commodity.objects.filter(public=True, name__contains=message).order_by('date')
     page = Paging(request, lengths=commodities.count(), page_num=5, max_page_num=9)
     return render(request, 'Commodity/search.html',
                   {'commodities': commodities[page.start:page.end], 'html_list': page.html_list})
+
+
+def add_to_cart(request, user_id, commodity_id):
+    commodity = Commodity.objects.get(id=commodity_id)
+    user = User.objects.get(id=user_id)
+    message = "加购失败"
+    flag = 0
+    if commodity.public and (not commodity.selltag):
+        if ShoppingCart.objects.filter(adduser=user, commodity=commodity).count() > 0:
+            message = "该商品已在购物车当中"
+            flag = 2
+        else:
+            message = "加购成功"
+            flag = 1
+            commodity.count += 1
+            commodity.save()
+            cart = ShoppingCart(commodity=commodity, adduser=user)
+            cart.save()
+    return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})
