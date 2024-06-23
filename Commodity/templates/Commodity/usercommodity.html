@@ -13,6 +13,15 @@
                             <p class="opacity-75">{{co.details}}</p>
                         </div>
                     </div>
+                    {% if co.selltag %}
+                        <small class="opacity-50 text-warning">
+                            <h4><span class="badge bg-success">已卖出</span></h4>
+                        </small>
+                    {% elif co.public == False %}
+                        <small class="opacity-50 text-warning">
+                            <h4><span class="badge bg-danger">下架</span></h4>
+                        </small>
+                    {% endif %}
                 </a>
             {% endfor %}
             {{ html_list|safe }}
