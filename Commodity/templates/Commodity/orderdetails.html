@@ -23,18 +23,21 @@
         <p>快递单号：{{ order.tracking_number }}</p>
     {% else %}
         {% if user == order.seller %}
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sent">发货</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" style="width: 90px" data-bs-target="#sent">发货</button>
         {% endif %}
     {% endif %}
-    
+    <div class="row pt-5">
+        <!-- 分界线 -->
+    </div>
     <div class="row">
         {% if color == 2 and user == order.purchaser %}
             <div class="col">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#receiptconfrim">确认收货</button>
             </div>
         {% endif %}
-
-        {% if order.donetag %}
+        
+        {% if order.donetag or order.backtag %}
+            
         {% else %}
             <div class="col">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancel">取消订单</button>
