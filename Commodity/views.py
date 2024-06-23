@@ -83,7 +83,7 @@ def editcommodity(request, id):
     content = {'commodity': commodity, 'form': form}
     return render(request, 'Commodity/editcommodity.html', content)
 
-@login_required
+
 def usercenter(request, id):  # 个人中心主页，默认展示购物车
     user_confirm(request, User.objects.get(id=id))
     shoppingcart = ShoppingCart.objects.filter(adduser=id).values('commodity')
@@ -116,7 +116,7 @@ def shoppingcart(request, id):  # 个人中心-购物车
             q.children.append(('id', s['commodity']))
 
         c = commodity.filter(q).order_by('date')
-        content = {'commodity': c}
+        content = {'commodity': c, 'user': request.user}
     return render(request, 'Commodity/shoppingcart.html', content)
 
 @login_required
@@ -283,3 +283,55 @@ def cancel(request, order_id):
     order.save()
     order.commodity_id.save()
     return redirect('Commodity:orderdetails', order_id)
+
+
+def rm_from_cart(request, user_id, commodity_id):
+    commodity = Commodity.objects.get(id=commodity_id)
+    user = User.objects.get(id=user_id)
+    message = "移出失败"
+    flag = 0
+    if ShoppingCart.objects.filter(adduser=user, commodity=commodity).count() > 0:
+        cart = ShoppingCart.objects.get(adduser=user, commodity=commodity)
+        cart.delete()
+        commodity.count -= 1
+        commodity.save()
+        flag = 1
+        message = "移出成功"
+        if not commodity.public:
+            message = message + ",该商品已下架"
+        elif commodity.selltag:
+            message = message + ",该商品已售出"
+
+    else:
+        message = message + ",商品不在购物车当中"
+
+    return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})
+
+
+def rm_from_product(request, commodity_id):
+    commodity = Commodity.objects.get(id=commodity_id)
+    message = "下架失败"
+    flag = 0
+    if commodity.public:
+        commodity.public = False
+        commodity.save()
+        message = "下架成功"
+        flag = 1
+    else:
+        message = message + ",商品未公开"
+
+    return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})
+
+def rm_to_product(request, commodity_id):
+    commodity = Commodity.objects.get(id=commodity_id)
+    message = "上架失败"
+    flag = 0
+    if not commodity.public:
+        commodity.public = True
+        commodity.save()
+        message = "上架成功"
+        flag = 1
+    else:
+        message = message + ",商品已公开"
+
+    return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})

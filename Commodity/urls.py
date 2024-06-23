@@ -23,7 +23,11 @@ urlpatterns = [
 
     path('add_to_cart/<int:user_id>/<uuid:commodity_id>', views.add_to_cart, name='add_to_cart'),
 
-    path('sent/<uuid:order_id>',views.sent, name='sent'),
+    path('sent/<uuid:order_id>', views.sent, name='sent'),
+    path('rm/<int:user_id>/<uuid:commodity_id>', views.rm_from_cart, name='rm'),
+    path('rm_from_product/<uuid:commodity_id>', views.rm_from_product, name='rm_from_product'),
+    path('rm_to_product/<uuid:commodity_id>', views.rm_to_product, name='rm_to_product'),
+
     path('receiptconfrim/<uuid:order_id>', views.receiptconfrim, name='receiptconfrim'),
     path('cancel/<uuid:order_id>', views.cancel, name='cancel'),
 ]
