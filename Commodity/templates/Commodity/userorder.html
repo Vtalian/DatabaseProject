@@ -16,7 +16,9 @@
                     </div>
                     <small class="opacity-50 text-warning">
                         <div>
-                            {% if o.senttag == False %}
+                            {% if o.backtag %}
+                                <h4><span class="badge bg-danger">已取消</span></h4>
+                            {% elif o.senttag == False %}
                                 <h4><span class="badge bg-secondary">未发货</span></h4>
                             {% elif o.senttag and o.receipttag == False %}
                                 <h4><span class="badge bg-warning">未收货</span></h4>

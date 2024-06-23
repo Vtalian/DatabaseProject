@@ -11,7 +11,10 @@
 </div>
 <form action="{% url 'Commodity:submitorder' commodity.id %}" method="post">
     {% csrf_token %}
-    {{form.as_div}}
+    <div class="form-floating mb-3 mt-3 text-center">
+        <textarea name="remark" class="form-control" placeholder="remark" style="height: 100px;" maxlength="200" id="id_remark"></textarea>
+        <label for="id_remark">备注</label>
+    </div>
     {% bootstrap_button button_type='submit' content='提交订单' %}
 </form>
 

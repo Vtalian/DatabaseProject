@@ -24,4 +24,6 @@ urlpatterns = [
     path('add_to_cart/<int:user_id>/<uuid:commodity_id>', views.add_to_cart, name='add_to_cart'),
 
     path('sent/<uuid:order_id>',views.sent, name='sent'),
+    path('receiptconfrim/<uuid:order_id>', views.receiptconfrim, name='receiptconfrim'),
+    path('cancel/<uuid:order_id>', views.cancel, name='cancel'),
 ]
