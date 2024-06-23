@@ -257,3 +257,22 @@ def sent(request, order_id):
             order.tracking_number=tracking_number
             order.save()
         return redirect('Commodity:orderdetails', order_id)
+
+
+def add_to_cart(request, user_id, commodity_id):
+    commodity = Commodity.objects.get(id=commodity_id)
+    user = User.objects.get(id=user_id)
+    message = "加购失败"
+    flag = 0
+    if commodity.public and (not commodity.selltag):
+        if ShoppingCart.objects.filter(adduser=user, commodity=commodity).count() > 0:
+            message = "该商品已在购物车当中"
+            flag = 2
+        else:
+            message = "加购成功"
+            flag = 1
+            commodity.count += 1
+            commodity.save()
+            cart = ShoppingCart(commodity=commodity, adduser=user)
+            cart.save()
+    return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})

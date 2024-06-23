@@ -1,4 +1,4 @@
-dbvenv/
+.venv/
 __pycache__
 static/
 .idea/

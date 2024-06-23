@@ -15,11 +15,13 @@ urlpatterns = [
     path('dropcommodity/<uuid:id>', views.dropcommodity, name='dropcommodity'),
     path('messages/<uuid:id>', views.messages, name='messages'),
     path('dropmessages/<int:id>', views.dropmessages, name='dropmessages'),
-  
+
     path('search/', views.search, name='search'),
 
     path('buy/<uuid:commodity_id>', views.buy, name='buy'),
     path('submitorder/<uuid:commodity_id>', views.submitorder, name='submitorder'),
+
+    path('add_to_cart/<int:user_id>/<uuid:commodity_id>', views.add_to_cart, name='add_to_cart'),
 
     path('sent/<uuid:order_id>',views.sent, name='sent'),
 ]
