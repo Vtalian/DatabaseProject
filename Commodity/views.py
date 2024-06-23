@@ -83,7 +83,7 @@ def editcommodity(request, id):
     content = {'commodity': commodity, 'form': form}
     return render(request, 'Commodity/editcommodity.html', content)
 
-
+@login_required
 def usercenter(request, id):  # 个人中心主页，默认展示购物车
     user_confirm(request, User.objects.get(id=id))
     shoppingcart = ShoppingCart.objects.filter(adduser=id).values('commodity')
@@ -135,7 +135,7 @@ def orders(request, id):  # 个人中心-订单
 def usercommodity(request, id):  # 个人中心-在售商品
     user = User.objects.get(id=id)
     user_confirm(request, user)
-    comodity = Commodity.objects.filter(owner=id).order_by('-date')
+    comodity = Commodity.objects.filter(owner=id).order_by('date')
     content = {'commodity': comodity, 'type': comodity}
     return render(request, 'Commodity/usercommodity.html', content)
 
