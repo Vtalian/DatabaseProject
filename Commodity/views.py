@@ -146,7 +146,8 @@ def dropcommodity(request, id):
         name = commodity.image
         path = '%s/%s' % (settings.MEDIA_ROOT, name)
         commodity.delete()
-        os.remove(path)
+        if path != "D:\\program\\Pyproject\\Django\\Database\\static\\media/Commodity/defaultimag.png":
+            os.remove(path)
         return redirect('Commodity:index')
 
 @login_required

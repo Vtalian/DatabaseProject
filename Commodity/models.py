@@ -10,7 +10,7 @@ class Commodity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, max_length=100, editable=False,
                           db_column='商品编号')
     name = models.CharField(max_length=60, db_column='商品名称')
-    image = models.ImageField(upload_to='Commodity', blank=True, null=True, db_column='商品图片')
+    image = models.ImageField(upload_to='Commodity', default='Commodity/defaultimag.png',blank=True, null=True, db_column='商品图片')
     price = models.DecimalField(max_digits=20, decimal_places=2, db_column='商品价格')
     date = models.DateTimeField(auto_now_add=True, db_column='上传日期')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, db_column='所属人')
