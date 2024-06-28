@@ -15,7 +15,7 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['content']
         labels = {'content': '发表留言吧！'}
-        widgets = {'content': forms.Textarea(attrs={'class': "form-control", 'col': 10, 'row': 2})}
+        widgets = {'content': forms.Textarea(attrs={'class': "form-control"})}
 
 
 class OrderForm(forms.ModelForm):
@@ -23,4 +23,8 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['remark']
         labels = {'remark': '添加备注'}
-        widgets = {'details': forms.Textarea(attrs={'col': 80})}
+
+class OrderSentForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = {'tracking_number'}

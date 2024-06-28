@@ -12,14 +12,20 @@
                     <p class="text-info opacity-75">{{co.price}}</p>
                     <p class="opacity-75">{{co.details}}</p>
                 </div>
-                <small class="opacity-50 text-warning">
-                    <h5><span class="badge bg-danger">爆</span></h5>
-                </small>
+                {% if co.count > 4 %}
+                    <small class="opacity-50 text-warning">
+                        <h4><span class="badge bg-danger">爆</span></h4>
+                    </small>
+                {% endif %}
                 
             </div>
         </a>
+            {% empty %}
+            <p class="text-center">无结果</p>
         {% endfor %}
-        {{ html_list|safe }}
+        {% if tag %}
+            {{ html_list|safe }}
+        {% endif %}
     </div>
 </div>
 {%endblock content%}

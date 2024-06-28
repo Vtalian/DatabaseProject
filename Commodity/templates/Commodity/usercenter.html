@@ -1,27 +1,48 @@
 {% extends 'Commodity/centerbase.html' %}
 {% load django_bootstrap5 %}
 
-{%block content %}
-<div class="list-group w-75">
-    {% for co in commodity %}
-        <div class="row">
-            <div class="col-11">
-                <a href="{% url 'Commodity:details' co.id %}" class="list-group-item list-group-item-action d-flex gap-3 py-3"
-                   aria-current="true">
-                    <img src="{{MEDIA_URL}}{{co.image}}" alt="twbs" width="100" height="80" class="rounded flex-shrink-0">
-                    <div class="d-flex gap-2 w-100 justify-content-between">
-                        <div>
-                            <h5 class="mb-0">{{co.name}}</h5>
-                            <p class="mb-0 opacity-75">{{co.price}}</p>
-                            <p class="mb-0 opacity-75">{{co.details}}</p>
+{% block content %}
+    <div class="list-group w-75">
+        {% for co in commodity %}
+            <div class="row">
+                <div class="col-11">
+                    <a href="{% url 'Commodity:details' co.id %}"
+                       class="list-group-item list-group-item-action d-flex gap-3 py-3"
+                       aria-current="true">
+                        <img src="{{ MEDIA_URL }}{{ co.image }}" alt="Cinque Terre" width="150" height="110"
+                             class="rounded flex-shrink-0">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h5 class="mb-0">{{ co.name }}</h5>
+                                <p class="mb-0 opacity-75">{{ co.price }}</p>
+                                <p class="mb-0 opacity-75">{{ co.details }}</p>
+                            </div>
+                            {% if co.selltag %}
+                                <small class="opacity-50 text-warning">
+                                    <h4><span class="badge bg-secondary">已售出</span></h4>
+                                </small>
+                            {% elif not co.public %}
+                                <small class="opacity-50 text-warning">
+                                    <h4><span class="badge bg-secondary">已下架</span></h4>
+                                </small>
+                            {% endif %}
                         </div>
+                    </a>
+                </div>
+                <div class="col-1">
+                    {% if co.public and not co.selltag %}
+                    	<a href="{% url 'Commodity:buy' co.id %}">
+                            <button class="btn btn-outline-primary">购买</button>
+                        </a>
+                    {% endif %}
+                    <div class="row pt-5">
+                        <!-- 分界线 -->
                     </div>
-                </a>
+                    <a href="{% url 'Commodity:rm' user.id co.id %}">
+                        <button type="button" class="btn btn-outline-danger">移出</button>
+                    </a>
+                </div>
             </div>
-            <div class="col-1">
-                    <a href="{% url 'Commodity:buy' co.id %}"><button class="btn btn-outline-primary">购买</button></a>
-            </div>
-        </div>
-    {% endfor %}
-</div>
-{%endblock content%}
+        {% endfor %}
+    </div>
+{% endblock content %}

@@ -29,14 +29,15 @@
                         <a class="nav-link" href="{% url 'Commodity:addcommodity' %}">添加商品</a>
                     </li>
                 </ul> <!-- End of links on left side of navbar -->
+                    <form class="d-flex" role="search" action="{% url 'Commodity:search' %}" method="post" >
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="content" value="{{ message }}">
+                        <a href="">
+                            <button class="btn btn-light" type="submit">Search</button>
+                        </a>
+                    </form>        
                 {% endif %}
-                <form class="d-flex" role="search" action="{% url 'Commodity:search' %}" method="post" >
-                    {% csrf_token %}
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="content" value="{{ message }}">
-                    <a href="">
-                        <button class="btn btn-light" type="submit">Search</button>
-                    </a>
-                  </form>
+                
                 <!-- Account-related links -->
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
     

@@ -11,8 +11,43 @@
 </div>
 <form action="{% url 'Commodity:submitorder' commodity.id %}" method="post">
     {% csrf_token %}
-    {{form.as_div}}
-    {% bootstrap_button button_type='submit' content='提交订单' %}
+    <div class="form-floating mb-3 mt-3 text-center">
+        <textarea name="remark" class="form-control" placeholder="remark" style="height: 100px;" maxlength="200" id="id_remark"></textarea>
+        <label for="id_remark">备注</label>
+    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pay">
+        支付
+    </button>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal fade" id="pay">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">支付</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="modal-body">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="text-center">
+                            <img src="/media/Commodity/pay.jpg" style="width: 200px;height: 300px" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    {% bootstrap_button button_type='submit' content='提交订单' %}
+                </div>
+
+            </div>
+        </div>
+    </div>
 </form>
 
 {%endblock content%}
