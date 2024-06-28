@@ -83,6 +83,7 @@ def editcommodity(request, id):
     content = {'commodity': commodity, 'form': form}
     return render(request, 'Commodity/editcommodity.html', content)
 
+
 @login_required
 def usercenter(request, id):  # 个人中心主页，默认展示购物车
     user_confirm(request, User.objects.get(id=id))
@@ -100,6 +101,7 @@ def usercenter(request, id):  # 个人中心主页，默认展示购物车
         c = commodity.filter(q).order_by('-date')
         content = {'commodity': c}
     return render(request, 'Commodity/usercenter.html', content)
+
 
 @login_required
 def shoppingcart(request, id):  # 个人中心-购物车
@@ -119,6 +121,7 @@ def shoppingcart(request, id):  # 个人中心-购物车
         content = {'commodity': c, 'user': request.user}
     return render(request, 'Commodity/shoppingcart.html', content)
 
+
 @login_required
 def orders(request, id):  # 个人中心-订单
     user = User.objects.get(id=id)
@@ -131,6 +134,7 @@ def orders(request, id):  # 个人中心-订单
     content = {'orders': orders}
     return render(request, 'Commodity/userorder.html', content)
 
+
 @login_required
 def usercommodity(request, id):  # 个人中心-在售商品
     user = User.objects.get(id=id)
@@ -138,6 +142,7 @@ def usercommodity(request, id):  # 个人中心-在售商品
     comodity = Commodity.objects.filter(owner=id).order_by('-date')
     content = {'commodity': comodity, 'type': comodity}
     return render(request, 'Commodity/usercommodity.html', content)
+
 
 @login_required
 def dropcommodity(request, id):
@@ -149,6 +154,7 @@ def dropcommodity(request, id):
         if path != "D:\\program\\Pyproject\\Django\\Database\\static\\media/Commodity/defaultimag.png":
             os.remove(path)
         return redirect('Commodity:index')
+
 
 @login_required
 def messages(request, id):
@@ -166,12 +172,14 @@ def messages(request, id):
         else:
             raise Http404
 
+
 @login_required
 def dropmessages(request, id):
     message = Message.objects.get(id=id)
     if request.method == 'POST' and request.user == message.speaker:
         message.delete()
         return redirect('Commodity:details', message.name.id)
+
 
 @login_required
 def buy(request, commodity_id):
@@ -181,6 +189,7 @@ def buy(request, commodity_id):
         content = {'commodity': commodity, 'form': form}
 
         return render(request, 'Commodity/buy.html', content)
+
 
 @login_required
 def submitorder(request, commodity_id):
@@ -200,6 +209,7 @@ def submitorder(request, commodity_id):
             ShoppingCart.objects.get(commodity=commodity, adduser=request.user).delete()
             return redirect('Commodity:orderdetails', orderid)
 
+
 @login_required
 def orderdetails(request, id):
     order = Order.objects.get(orderid=id)
@@ -217,6 +227,7 @@ def orderdetails(request, id):
 
     content = {'order': order, 'commodity': commodity, 'tag': tag, 'color': color, 'form': form, 'user': request.user}
     return render(request, 'Commodity/orderdetails.html', content)
+
 
 @login_required
 def search(request):
@@ -237,6 +248,7 @@ def search(request):
     return render(request, 'Commodity/search.html',
                   {'commodities': commodities[page.start:page.end], 'html_list': page.html_list, 'tag': tag})
 
+
 @login_required
 def sent(request, order_id):
     if request.method == 'POST':
@@ -248,6 +260,7 @@ def sent(request, order_id):
             order.tracking_number = tracking_number
             order.save()
         return redirect('Commodity:orderdetails', order_id)
+
 
 @login_required
 def add_to_cart(request, user_id, commodity_id):
@@ -268,6 +281,7 @@ def add_to_cart(request, user_id, commodity_id):
             cart.save()
     return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})
 
+
 @login_required
 def receiptconfrim(request, order_id):
     order = Order.objects.get(orderid=order_id)
@@ -275,6 +289,7 @@ def receiptconfrim(request, order_id):
     order.donetag = True
     order.save()
     return redirect('Commodity:orderdetails', order_id)
+
 
 @login_required
 def cancel(request, order_id):
@@ -322,6 +337,7 @@ def rm_from_product(request, commodity_id):
         message = message + ",商品未公开"
 
     return render(request, 'Commodity/add_to_cart.html', {'message': message, 'flag': flag})
+
 
 def rm_to_product(request, commodity_id):
     commodity = Commodity.objects.get(id=commodity_id)
