@@ -43,6 +43,11 @@ def addcommodity(request):
             c = form.save(commit=False)
             c.owner = request.user
             id = c.id
+            c.phone=request.POST['phone']
+            if len(request.POST.getlist('exchange')) == 0:
+                c.exchange = False
+            else:
+                c.exchange = True
             c.save()
             return redirect('Commodity:details', id=id)
 

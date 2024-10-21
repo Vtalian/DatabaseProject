@@ -12,11 +12,18 @@
                     <p class="text-info opacity-75">{{co.price}}</p>
                     <p class="opacity-75">{{co.details}}</p>
                 </div>
-                {% if co.count > 4 %}
+                <div>
+                    {% if co.count > 4 %}
                     <small class="opacity-50 text-warning">
                         <h4><span class="badge bg-danger">爆</span></h4>
                     </small>
                 {% endif %}
+                {% if co.exchange %}
+                    <small class="opacity-50 text-warning">
+                        <h4><span class="badge bg-success">物</span></h4>
+                    </small>
+                {% endif %}
+                </div>
             </div>
         </a>
         {% endfor %}

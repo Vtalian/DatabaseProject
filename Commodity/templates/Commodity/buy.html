@@ -38,6 +38,11 @@
                             <img src="/media/Commodity/pay.jpg" style="width: 200px;height: 300px" class="img-fluid">
                         </div>
                     </div>
+                    {% if commodity.exchange %}
+                        <div class="alert alert-info" role="alert">
+                            若选择以物换物，请直接联系商品卖家：{{ commodity.phone }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- 模态框底部 -->

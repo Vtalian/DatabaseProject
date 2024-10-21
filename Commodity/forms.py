@@ -5,8 +5,9 @@ from .models import Commodity, Message, Order
 class CommodityForm(forms.ModelForm):
     class Meta:
         model = Commodity
-        fields = ['name', 'image', 'price', 'details']
-        labels = {'name': '商品名称', 'image': '商品图片', 'price': '商品价格', 'details': '详情'}
+        fields = ['name', 'image', 'price', 'details', 'exchange']
+        labels = {'name': '商品名称', 'image': '商品图片', 'price': '商品价格', 'details': '详情',
+                  'exchange': '是否支持以物换物'}
         widgets = {'details': forms.Textarea(attrs={'col': 80})}
 
 
@@ -23,6 +24,7 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['remark']
         labels = {'remark': '添加备注'}
+
 
 class OrderSentForm(forms.ModelForm):
     class Meta:

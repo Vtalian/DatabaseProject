@@ -10,7 +10,8 @@ class Commodity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, max_length=100, editable=False,
                           db_column='商品编号')
     name = models.CharField(max_length=60, db_column='商品名称')
-    image = models.ImageField(upload_to='Commodity', default='Commodity/defaultimag.png',blank=True, null=True, db_column='商品图片')
+    image = models.ImageField(upload_to='Commodity', default='Commodity/defaultimag.png', blank=True, null=True,
+                              db_column='商品图片')
     price = models.DecimalField(max_digits=20, decimal_places=2, db_column='商品价格')
     date = models.DateTimeField(auto_now_add=True, db_column='上传日期')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, db_column='所属人')
@@ -18,6 +19,8 @@ class Commodity(models.Model):
     selltag = models.BooleanField(default=False, db_column='售出标志')
     details = models.TextField(max_length=200, blank=False, null=True, default="", db_column='详细信息')
     count = models.IntegerField(default=0, db_column='加购次数')
+    exchange = models.BooleanField(default=False, db_column='以物换物')
+    phone = models.CharField(max_length=60,db_column='联系方式')
 
     def __str__(self):
         return self.name
@@ -35,7 +38,7 @@ class Order(models.Model):
     commodity_id = models.ForeignKey('Commodity', unique=False, on_delete=models.CASCADE, db_column='商品编号')
     date = models.DateTimeField(auto_now_add=True, db_column='创建日期')
     seller = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, db_column='卖方')
-    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer',db_column='‘买方')
+    purchaser = models.ForeignKey(User, unique=False, on_delete=models.CASCADE, related_name='buyer', db_column='‘买方')
     remark = models.TextField(max_length=100, blank=True, null=True, default="", db_column='备注')
     donetag = models.BooleanField(default=False, db_column='完成标志')
     senttag = models.BooleanField(default=False, db_column='发货标志')
